@@ -1,16 +1,17 @@
 package com.tutorial.maro.framework.com.tutorial.maro.framework.implementation;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
 import com.tutorial.maro.framework.Audio;
 import com.tutorial.maro.framework.Music;
 import com.tutorial.maro.framework.Sound;
+
+import java.io.IOException;
 
 public class AndroidAudio implements Audio {
     AssetManager assets;
@@ -19,7 +20,15 @@ public class AndroidAudio implements Audio {
     public AndroidAudio(Activity activity) {
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         this.assets = activity.getAssets();
-        this.soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
+
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        this.soundPool = new SoundPool.Builder()
+                .setAudioAttributes(attributes)
+                .build();
     }
 
     @Override
